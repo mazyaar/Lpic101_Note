@@ -1,0 +1,2073 @@
+
+	#It's Better to Open this document with Notepad++#
+
+	###################################################
+	#                   LPIC 101-102                  #
+	#                    Session 1/2                  #
+	###################################################
+
+
+				Linux Important Directory:
+
+	0. / : is root of all this Directory
+
+	1. bin: Linux User Binary Comma22.nd Like: mv, rm, touch,... .
+
+	2. Sbin: super Linux User Binary Command Like: Dhcp, systemctl, service, apt .
+
+	3. dev: Device file Exist Here.( Disk, CDrom, Floppy, Flash,...) .
+
+	4. Var: Linux Variable File ( Log file, Inbox, Mail,... .
+
+	5. tmp: Temporary file is here.
+
+	6. boot: Linux Boot file, Boot Loader, Kernel file.
+
+	7. etc: Linux Configuration file here.
+
+	8. root: root User Home Directory( Diffrent with another user Directory).
+
+	9. lib: Linux Library file.
+
+	10. lib64: New library and 64bit library file.
+
+	11. home: user home directory is here.
+
+	12. mnt: mount point of temporary file system.
+
+	13. media: Removable media mount this directory.
+
+	14. opt: Add-on application software packages.
+
+	15. srv: data for service provided by this system.
+
+	16. proc: virtual file system documenting kernel and process status as text fil.
+
+	17. usr: user file Directory. and every program user setup move to this directory and have many directory like bin, boot, ... .
+
+		Notice:For first time when KernelUp all of information and Hardware details recorded on Proc
+
+
+	Basic Commands:
+
+	CLI : sommand line Interface / Modernest CLI for Linux is Bash and is default shell.
+
+		Note:
+
+	1) ls : Shoe list of file ( "dir" in windows)
+
+		ls   /home
+		ls  / home/ admin
+		ls / ( show root Directory)
+
+		2) pwd: print working Directory
+
+		3) mkdir: Make directory
+
+		4) cd : Change directory
+
+		5) touch : Maked a file to any DIrectory we want. we can make multi file, like: touch m1 m2 m3 m4
+
+		6) tree : Show the tree of directory that we are here.
+
+		7) rm: Remoce file command
+		
+		# Note : if you want to delete file in directory we should use -r ( switch) that is recursive switch when you shoul use -f swicht, the kernel force delete file and directory.
+
+		8) mkdir -p : that help to use to make panel and tree of file for examle is wrong to use: mkdir /home/A
+			or use this option you can use thi command: mkdir -p /home/A/b. in fact the command structure is : mkdir <path>/"file or directory name"
+
+		9) cp: copy file or director( with -r switch): cp -r <source> <destination>
+
+		10) su: switch user
+
+		11) hostname : with this command we can change our host name foe examle: hostname sysadmin
+			the stracture is [ user @ hostname DIR]
+
+
+
+	# Regular Expression:
+
+		1) * : everything
+		[a-z]* : everything that contains in first letter file name is a to z (lower case)
+		[a-z][1,2]* : first letter is a to z, second letter is numbers 1 to 2 and after is everything.
+		[a-z,A-Z][0-9]* : first letter is a-z(lower case) or A-Z(upper case) and second is numbers and after is everything.
+
+		2) ; : [Enter] we can do many work in 1 line command, it;s means that we can do multi task in one line.
+
+		3) ~ : is home directory and is shourtcut that any user can use this to move on to home dirctory. for examle: cd ~
+
+			Notice: we have note rename command, we use move command and choice smae path with new name.
+
+						tab : use with tab keyboard key to complete command.
+
+
+	###################################################
+	#                   LPIC 101-102                  #
+	#                     Session 3                   #
+	###################################################
+
+	1)fdisk -l : list disk status and get information from disks of pc.
+
+		hda : IDE disk
+		sda : SATA disk
+
+	Partitions : Primary Partitionson is primary and extended.
+
+	limited of Partions is 4, for solve this problem Extended partions use.
+
+	Primary
+	extended
+	Logical: Logical created in extended.
+
+		CHC: Cylandr Head Sector.
+
+
+	a: Means Disk is primary
+	b: Means Disk is Secondary.
+	m: Use for manaul
+
+	Sector 0 is 512 MB in 3 part: 1.MBR 2.PT 3.CRC
+	1. Master Boot Record
+	2. Partion Table
+	3. Cheack Health of disk.
+
+	2)fdisk /dev/sda
+
+	Primary
+		-Master  /dev/sdda
+		-slave   /dev/sddb
+
+	Secondary
+		-Master /dev/sdc
+		-slave  /dev/sdd
+
+	Addressing Data on Partition
+
+
+			FAT
+			NTFS
+			XFS
+			JFS
+			ZFS
+			EXTENDED FS 2/3/4 (ext2/3/4) (Linux)  <===========
+			Resierfs
+			btrfs
+			ISO9660(CDROM)
+			UDF(DVD)
+
+	mkfs : make file system, it means if you want to use partions you should make it as special file system like: ext4. ntfs. fat32, iso, ...
+
+	Notice: every block has Address becuse we should read and write files, file system do this act for files and addresses every files locations.
+
+	Notice: inode is every blocks thats file locate there.
+
+	makfs -t ext4 /dev/sd*  : for formating partions and change file system.
+
+#####################Mount/Umount#############################################################################
+	for mounting Device for use this command:
+
+	mount ( show all mounted devices)
+	mount <Device Files> <mount point>
+	mount /dev/sdb1 /home/sysadmin/p1
+
+	Notice: When device mounte that it have file system.
+
+	#for umounting Device for use this command:
+
+	umount /dev/sda1 (you should exit from directory and mount it.)
+
+	#Mount option:
+
+	ro/rw/ noexec
+
+	ro: read-only
+	rw: read-write
+	noexec: no file can execute.
+	default is exec and noexec cause no file execute.
+
+	-o switch is for choice options of mounting device.
+
+	mount -o ro/rw/noexec /dev/sda1 /home/sysadmin/p1
+
+	Notice: Linux cannot mount automatically device for automat mounting we should change setting on this directory:
+
+	/etc/fstab     ( and write details of mounted device on this table)
+		
+		<file_system>              <mount_point>    <file_system>    <mount_option>         	<options>			  <dump>        <pass>
+		======================================================================================================================================
+		/dev/sdb1(or UUID)        /home/sysadmin/p1      ext4            ro,noexec or ..   		  default			   	 0              1
+
+
+
+	file_system: path of devices decide to mount
+
+	UUIDs: UUIDs are generated by the maked file system utilities(mks.*) when you create a file system. blkid will show you of the UUID of mounted devices and portitions.
+
+	<dir>: tells the mount command where it should mount the <file system> to.
+
+	<type>: defines the file system type of the device or partition to be mounted. Many different file systems are supported. Some examples are: ext2, ext3, reiserfs, xfs, jfs, smbfs, iso9660, vfat, ntfs, swap, and auto. The 'auto' type lets the mount command to attempt to guess what type of file system is used, this is useful for removable devices such as CDs and DVDs.
+
+	<options>: define particular options for filesystems. Some options relate only to the filesystem itself. Some of the more common options are:
+
+	auto: file system will mount automatically at boot, or when the command 'mount -a' is issued.
+
+	noauto: the filesystem is mounted only when you tell it to.
+
+	exec: allow the execution binaries that are on that partition (default).
+
+	noexec: do not allow binaries to be executed on the filesystem.
+
+	ro: mount the filesystem read only.
+
+	rw: mount the filesystem read-write.
+
+	sync: I/O should be done synchronously.
+
+	async: I/O should be done asynchronously.
+
+	flush: specific option for FAT to flush data more often, thus making copy dialogs or progress bars to stays up until things are on the disk.
+
+	user: permit any user to mount the filesystem (implies noexec,nosuid,nodev unless overridden).
+
+	nouser: only allow root to mount the filesystem (default).
+
+	defaults: default mount settings (equivalent to rw,suid,dev,exec,auto,nouser,async).
+
+	suid: allow the operation of suid, and sgid bits. They are mostly used to allow users on a computer system to execute binary executables with temporarily elevated privileges in order to perform a specific task.
+
+	nosuid: block the operation of suid, and sgid bits.
+
+	noatime: do not update inode access times on the filesystem. Can help performance.
+
+	nodiratime: do not update directory inode access times on the filesystem. Can help performance. You do not need to enable this flag if you have already enabled noatime.
+
+	relatime: update inode access times relative to modify or change time. Access time is only updated if the previous access time was earlier than the current modify or change time (similar to noatime, but doesn't break mutt or other applications that need to know if a file has been read since the last time it was modified). Can help performance.
+
+	<dump>: is used by the dump utility to decide when to make a backup. When installed, dump checks the entry and uses the number to decide if a file system should be backed up. Possible entries are 0 and 1. If 0, dump will ignore the file system, if 1, dump will make a backup. Most users will not have dump installed, so they should put 0 for the <dump> entry.
+
+	<pass>: fsck reads the <pass> number and determines in which order the file systems should be checked. Possible entries are 0, 1, and 2. The root file system should have the highest priority, 1, all other file systems you want to have checked should get a 2. File systems with a <pass> value 0 will not be checked by the fsck utility.
+
+
+			we can use label to locate path devices fo examle:
+
+	e2label /dev/<disk-or-partions> <label_name>
+
+	### for testing setting of mount table by mount command, mount a device once a time.
+
+				Notice: in new kernel with " resize2fs " we can resize lv and add extra size, so:
+
+	resize2fs <LV_PATH>
+
+
+
+	###################################################
+	#                   LPIC 101-102                  #
+	#                     Session 4                   #
+	###################################################
+
+	partprobe:  this command scan partions and scan all of partions.
+
+	Linux LVM Configuration
+
+	senario: added 3 disk to primary physical disk: 1-sda: 100GB(IDE)  2-sdc:100gb(SATA) 3-sdd:200G(SATA) 4-sdb:20(linux disk and primary)
+	so add extra size to LVM Group
+
+
+
+			#Added extra hard to LV:
+	
+	Step 0:
+	
+		fdisk /dev/sda1
+		from switch "n" create new primary partion with 100GB Capacity. and w to write it.
+		make primary partion.
+		
+		set partion number(1-4)
+		set cylinder or size of disk
+		after set partitions set this command: partprobe
+         
+	Step1: create physical volume(s):	 
+		 1-1 Change Partition System ID to "8e" : becuse "8e" is partion type of linux LVM.
+		 fdisk /dev/sda
+		 change partion with "t" to "8e".
+		 
+            1-2 Create Physical Volume: When we make LV with multi partions, linux devided partions to many little block and numbrize those, so you should explain to linux that which partions are in LV with pvcreate command. for example:
+			
+                  #pvcreate /dev/sda1 /dev/sda2 /dev/sdb5 /dev/sdb6 /dev/sdc1 /dev/sdc2 /dev/sdc5
+                  #pvs : Physical volume show, to show physical volume created 
+    
+	Step2: create volume group(s):
+			vgcreate <volume_name> <partitions>  #for example:
+			vgcreate vg1 /dev/sda2 /dev/sb1 /dev/sdc1 /dev/hda1
+			vgs # this command show vgs create
+						
+	Step 3: Create Logical Volume(s) (LV)
+			switches: -n: name of lv, -L: lv capacity 
+    
+            #lvcreate -n LV1 -L 20GB VG1
+			#lvcreate -n LV2 -L 20GB VG1
+            #lvs
+			
+	Step 4: Format LVs: for use LVs we should change to fs with mkfs -t <partion_type> <device_path> or
+			mkfs.<partion_type> <device_path>
+
+            #mkfs -t ext3 /dev/VG1/LV1
+			#mkfs -t ext3 /dev/VG1/LV2
+            
+	Step 5: Mount LVs
+
+             #mount /dev/VG1/LV1 /hamid/lv1
+             #mount /dev/VG1/LV2 /hamid/lv2
+             #mount
+
+
+	Step 6: Permanent Mount Point
+             /etc/fstab
+			 
+			 
+
+	#Notice: for add extra space to LV use this command: lvresize -L + or - Number of Gig <device_path>
+	
+	#notice: if the space for resize was low you can add hard to linux and create physical volume and make partitons then added to lv with this command:
+			
+			vgextend <vg_name> <vg_path>
+			vgextend vg1 /dev/sde1
+			
+	#####################################################################################################		
+	####################################### SWAP ########################################################
+	#####################################################################################################
+
+	One of basically hardware of a Pc is Memory, and Memory is expensive device.
+
+	Swap, help to improve system performance, for expamle when ram get full, system use swap for helping Ram, for example when you set 8Gb ram ang 16Gb ram you can use 24Gb capacity Memory for increase your Performance.
+
+
+	in windows we can set manaully or Automatic set Virtual Memory that do same work as Swap, name is Virtual Memory:
+
+	Advanced system / System Properties /  performance / Advanced / virtual Memory.
+
+
+	Best Practice: set swap as you need, but every vendor has different plan, for example microsoft set swap capacity as Memory capacity, some vendors say set swap with this plan, Swap: 1.5 or 2 * ram capacity, but it's depend to your work and need.
+
+	How to define swap version :
+
+		1-	fdisk/dev/sdd2 ( make a new partition and set Capacity)
+		2-	set partiton table as swap.
+		3-	make swap file system with mkswap /dev/sd**
+		4-	Attach Swap partion to kernel with "swapon" command: swapon /dev/sd**
+		5-	verify swap space in linux to show whick swap is on wit "-s" switch: swapon -s
+		6-	for Derrach swap from system use command: swapoff
+
+					NOtice: Swap not Mounted but it can be permanent.
+		
+		<file_system>         <mount_point>        <type>    		<mount_option>        <options>			dump      		  pass
+		===========================================================================================================================
+		/dev/sd**				no					swap				swap				default		   	  0					0
+		
+		
+		
+	#######################SWAP_FILE#############################################
+	
+			
+	Notice: Maybe we have not enough Space to create disk, you can choice specific space to your disk then do this steps:
+	
+		
+		Step 1: Create 1GB File with Specific Capacity that we want Swap file with dd: Convert and copy files
+          
+              dd if=/dev/zero of=/root/myswap bs=1024 count=1000000
+					bs: block size count: count of block size
+     
+		Step 2: Create Swap Space on File
+
+               #mkswap /root/myswap 
+
+		Step 3: Attach Swap into Kernel
+
+               #swapon /root/myswap 
+
+				Note: free -m ---> Show Memory Status
+				
+				Note: free -m : Show Memory Status and usage
+				
+				
+	###################################################
+	#                   LPIC 101-102                  #
+	#                     Session 5                   #
+	###################################################
+	
+	
+	# Linux Run Level:
+	
+	0 : halt
+
+	1 : CLI/No Network/Single User Mode/No Login ---> Tshoot ---> Password Recovery
+
+	2 : CLI/No Network/Multi User Mode
+
+	3 : CLI/Network/Multi User Mode
+
+	4 : -------
+
+	5 : GUI/Network/Multi User Mode (Full)
+
+	6 : Reboot/Restart
+
+			Note: It's difference between  runlevels of debian and Red hat.
+				Debian Base linux Default Runlevel: 5
+				Redhat base linux Default Runlevel: 2
+				
+		
+		to show run level of linux use this command: runlevel
+		
+		to change runlevel use this command: init <number_runlevel>  for example for switch to runlevel 3: init 3
+		
+		
+	############## Linux Service Managment ##############
+
+	Method 1: Change runlevel Shortcut:
+		
+		
+		each runlevel has specific directory that in every directory has shourtcat that point to service.
+		
+		so we can manage which service works on which runlevel.
+		
+		runlevel and they shourtcut placed on path: /etc/rc(0-6).d
+		the part if runlevel: 0 to 6
+		
+			Note: if first of shortcut name of service was "s" it means service strats in this runlevel and when it's k it means service kill and stop..
+		
+		to change status of services in specific run level you should change to start character from "s" to "k" or redo from 'mv" command.
+		
+		stracture:  S|K <number><name> : number is very important becuse services maybe has dependency and you must know which service should start first. for kill is same too.
+		
+		
+	Method 2: Manaul change runlevel with chkconfig: you can change service run level on|off with chkconfig
+	
+			1.	chkconfig --list : to show service status in All Runlvel
+			2.	chkconfig --level <Runelvels> <Service_Name> on|off : for change status of service to specific runlevel.
+	
+					NOtice: on ubuntu 20.04 and later you should setup deb package of chkconfig
+
+	Method 3: use "ntsysv" command for change Runlevel ( for redhat and centos)
+	
+			ntsysv --level 2345(in level 2&3&4&5)
+	
+
+
+	############## Type of files ##############
+	ls -l
+
+	- : Regular File
+	d : directory
+	b : block device File
+	l : link ( microsoft named shourtcut)
+	.
+	.
+	.
+	
+			
+	############## Links ##############
+	
+	linux has 2 type of link : hard/soft link, this use for 
+	
+	
+	type 1: is soft or symbolic link
+	
+	for make link file in linux use"ln" command:
+	
+		ln -s <orginal_Path_file><link_name>
+			
+			-s command means create soft link.
+			
+			
+	type 2: is Hard link
+	
+		ln <orginal_Path_file><link_name>
+			example: ln file1 file2
+			
+	
+	Use "ls -li" <path_devices> : show inode of files.
+	
+	#stat <file_name> : show completly details of file
+	#dumpe2fs <Device_File>	: with this command can see your partition information completly.
+	
+	
+	############## More switch for print/show files ##############
+	
+		
+	-cat <File_Path>
+
+	-tac <File_path>
+
+	-more <File_path> ---> Scroll Down
+
+	-less <File_path> ---> Scroll Up/Down
+
+	-head <File_path>
+
+    head -n <LINE#> file4 ---> show n first line of file
+
+		*Default n=10
+
+	-tail <File_path> 
+   
+	tail -n <LINE#> file4 ---> show n Last line of file
+    
+		*Default n=10
+	
+	
+	
+	############## Management Linux ##############
+	
+	for manage linux. you may need to know managment many parts od linux:
+	
+	Disk Mgmt
+
+	Runlevel Mgmt
+
+	Service Mgmt
+
+	User Mgmt
+
+	Group Mgmt
+
+	Permission Mgmt
+
+	Software Mgmt
+
+	Library Mgmt
+
+	Driver Mgmt
+
+	Process Mgmt
+	
+	and etc.
+	
+	
+	
+	
+	###################################################
+	#                   LPIC 101-102                  #
+	#                     Session 6                   #
+	###################################################
+	
+	linux character and Chaining Command:
+	
+	
+	1. Ampersand Operator (&): The function of ‘&‘ is to make the command run in background. Just type the command followed with a white space and ‘&‘. You can execute more than one command in the background, in a single go.
+
+	Run one command in the background: ping ­c5 www.tecmint.com &
+	
+	
+	2. semi-colon Operator (;): The semi-colon operator makes it possible to run, several commands in a single go and the execution of command occurs sequentially.
+
+	root@localhost:/home/tecmint# apt-get update ; apt-get upgrade ; mkdir test
+	
+	3. AND Operator (&&): The AND Operator (&&) would execute the second command only, if the execution of first command SUCCEEDS.
+	
+	root@localhost:/home/tecmint# ping -c3 www.tecmint.com && links www.tecmint.com
+	
+	4. OR Operator (||): The OR Operator (||) is much like an ‘else‘ statement in programming. The above operator allow you to execute second command only if the execution of first command fails, i.e., the exit status of first command is ‘1‘.
+
+	tecmint@localhost:~$ apt-get update || links tecmint.com
+	
+	5. NOT Operator (!): The NOT Operator (!) is much like an ‘except‘ statement. This command will execute all except the condition provided. To understand this, create a directory ‘tecmint‘ in your home directory and ‘cd‘ to it.
+
+	tecmint@localhost:~/tecmint$ rm -r !(*.html)
+	
+	6. AND – OR operator (&& – ||): The above operator is actually a combination of ‘AND‘ and ‘OR‘ Operator. It is much like an ‘if-else‘ statement.
+
+	tecmint@localhost:~/tecmint$ ping -c3 www.tecmint.com && echo "Verified" || echo "Host Down"
+	
+	7. PIPE Operator (|): This PIPE operator is very useful where the output of first command acts as an input to the second command.
+	
+	tecmint@localhost:~/tecmint$ ls -l | less
+	
+	8. Command Combination Operator {}: Combine two or more commands, the second command depends upon the execution of the first command. For example, check if a directory ‘bin‘ is available or not, and output corresponding output.
+	
+	tecmint@localhost:~$ [ -d bin ] || { echo Directory does not exist, creating directory now.; mkdir bin; } && echo Directory exists.
+
+	9.Precedence Operator (): The Operator makes it possible to execute command in precedence order.
+
+	Command_x1 &&Command_x2 || Command_x3 && Command_x4.
+	
+	In the above pseudo command, what if the Command_x1 fails? Neither of the Command_x2, Command_x3, Command_x4 would executed, for this we use Precedence Operator, as:
+
+	(Command_x1 &&Command_x2) || (Command_x3 && Command_x4)
+	In the above pseudo command, if Command_x1 fails, Command_x2 also fails but Still Command_x3 and Command_x4 executes depends upon exit status of Command_x3.
+
+	10. Concatenation Operator (\): The Concatenation Operator (\) as the name specifies, is used to concatenate large commands over several lines in the shell. For example, The below command will open text file test(1).txt.
+
+	tecmint@localhost:~/Downloads$ nano test\(1\).txt
+
+	11. Combination Operator ({}): The execution of the command succeeding this operator depends on the execution of the first command. The set of commands combined using {} operator executes when the command preceding it has successfully executed.
+
+	[ -f hello.txt ] && echo "file exists" ; echo "hello"
+	[ -f hello.txt ] && { echo "file exists" ; echo "hello"; }
+
+
+	############## Linux User Mgmt ##############
+	
+	/etc/passwd : All of users database locate here.
+	
+	## This is a standard syntax of user details that write to passwd file. ##
+	 
+	 <Username>:x:<User ID>:<Group ID>:<Comment>:<Home Directory>:<Shell>
+	 
+	UID: is number that unix choice for labeled user.
+
+		system user UID <500
+		Regular user UID >=500
+		
+	
+	
+	############## Adding User into Linux ##############
+	#Adding User: ( with useradd or adduser commands )
+	
+	useradd guest
+
+		<Option>
+
+			-d Home_Directory
+			-s shell
+			-u user id
+			-g group id| group name
+			-G supplmentary Groups
+			-c comment
+
+
+		Example: useradd -c "guestusr" -d /test/guest -s /bin/sh -u 1000 guestusergroup
+
+		#less /etc/passwd | grep -i guest
+	
+	
+	############## Modify User into Linux ##############
+	#Modify User:
+		usermod <Options> <Username>
+
+	Example: usermod -u 2000 guest
+       #less /etc/passwd | grep -i guest
+	   
+	
+	############## Delete User into Linux ##############
+
+	#userdel <Username>
+
+		Example: #userdel mohammad
+
+
+              -r ---> remove hoem directory also
+              -f ---> force remoce loggedin user
+
+	Note: id <Username> ; with this command user linux shows user information.
+
+	Note: /etc/login.defs ( login Configuration and details are in this files.)
+
+	Note: Password + Policy are occured in the:  /etc/shadow
+	
+	Note:	usermod -L : Lock User's Password
+			usermod -U : Unlock User's Password
+			
+	
+	############## Linux Group Mgmt ##############
+
+	/etc/group ----> Linux Groups Database
+
+			IT:x:1001:
+
+		<Group_Name>:x:<Group_ID>:<it could be non zero>
+
+
+
+	############## Add Group ##############
+
+	#groupadd <Group_Name>
+
+			Example: groupadd IT
+
+			Example: groupadd -g 2500 IT
+					gpasswd IT 
+						:**********
+						:**********
+
+
+	############## Modify Group into Linux ##############
+
+
+	#groupmod 
+			-n : newname 
+          Example: #groupmod -n NEWIT IT
+               #groupmod -g 2001 IT
+
+
+       
+	############## Delete Group into Linux ##############	
+
+
+			#groupdel <Group_Name>
+			
+		
+		Notice: if a group of user changed, it's file owner changed too.
+
+
+
+	############## Linux user Permission ##############
+	
+	# for see permission of file or directory. simple command is: ls -l
+	
+		ls -l : 
+		
+		file include 10 block: 0123456789
+		
+		block: 0 is type:
+		
+			0: File Type
+
+				-: Regular File
+				d: directory
+				l: link
+				b: block device
+					.
+					.
+					.
+					.
+			
+			Block 1 to 9 set for permissions. for example:
+			
+				owner/group/other
+				123/456/789   : first three number: owner permission.
+								second	three number: group permission.
+								third three number: other permission.
+								
+			
+			another type of p permishion is : r , w , x
+			
+				r: read
+				w: write
+				x: execute
+						
+						rwx/rwx/rwx/   
+				
+				notice: if in permission you see " - " it's means for this part permission not set.
+				
+				
+	############## Change Permissions in Linux ##############
+
+	# you can change Permission with this command : chmod
+			
+			chmod ABC file2
+			A:	owner
+			B:	owner
+			C:	other
+			
+			
+			rwx	rwx	rwx                     r:4 w:2 x:1
+			421	421	421  
+			
+			Example: chmod 764 :    rwx/rw-/r-- 
+			
+			
+	# Character mode for change permission: 
+			u: owner
+			g: group
+			o: other
+			a: all
+			r:	read
+			w: write
+			x: execute
+			
+		Example:	chmod u=rwx,g=rw,o=r file1
+		
+			# use specific character : + ,  - , =
+			
+		Example: u-x,g=r,o+w file1
+		
+	############## Change Ownership ##############
+
+		# change ownership with chown command.
+		
+			chown <new owner> <file_path>
+				
+				Example: chown guest file1
+		
+		Note: you can change the group owner with chown too.
+		
+				#chown <NEW_OWNER>:<NEW_GROUP> <FILE_PATH>
+				#chown <NEW_OWNER>.<NEW_GROUP> <FILE_PATH>
+
+
+
+
+	###################################################
+	#                   LPIC 101-102                  #
+	#                     Session 7                   #
+	###################################################
+	
+	
+	############## Software Managment ##############
+
+
+	GCC ( Gnu C Compiler)
+	
+	nano-2.4.2.tar.gz
+	
+	A-Install From Source Code
+
+	Step 1: Decompress
+
+	Step 2: UnArchive
+
+   #tar xzvf nano-2.4.2.tar.gz
+             z: gzip
+             x: xtract
+
+   #tar xjvf nano-2.4.2.tar.bz2
+
+             j: bzip
+
+
+	Step 3) cd Directory
+
+	Step 4) less INSTALL
+
+	Step 5) ./configure
+
+	Step 6) Compile ----> "make"
+
+	Step 7) Install ----> "make install"
+
+
+
+			Note: Default Installation Directory: /usr/local/
+
+
+	############## Install Linux Package ##############
+
+
+	Note:
+
+		Redhat-----> .rpm (redhat Package manager)
+
+		Debian----> .deb
+
+	############## Query rpm databas ##############
+		
+		#dpkg -i <debian package> : install debian Package
+		
+		#dpkg -r <debian package> : Remove debian Package
+		
+		
+		#dpkg -P <debian package> : purge debian Package
+		
+		
+		#dpkg -V <debian package> : Verify debian Package
+		
+		anothe switches:
+			
+			dpkg
+		
+				--yet-to-unpack                  Print packages selected for installation.
+				--predep-package                 Print pre-dependencies to unpack.
+				--add-architecture <arch>        Add <arch> to the list of architectures.
+				--remove-architecture <arch>     Remove <arch> from the list of architectures.
+				--print-architecture             Print dpkg architecture.
+				--print-foreign-architectures    Print allowed foreign architectures.
+				--assert-<feature>               Assert support for the specified feature.
+				--validate-<thing> <string>      Validate a <thing>'s <string>.
+				--compare-versions <a> <op> <b>  Compare version numbers - see below.
+		
+		
+	###################################################
+	#                   LPIC 101-102                  #
+	#                     Session 8                   #
+	###################################################		
+	
+	
+	
+	############## Install Packages ##############
+	
+	# repository: is a placed that you update your linux program and kernel.
+
+
+	#apt or apt-get : a program that get applications.
+	#apt : is new version of apt-get
+	
+	
+	#apt install		apt-get install	( Package install)
+	#apt remove			apt-get remove	(Remove Package)
+	#apt purge			apt-get purge	(Remove Package that have config files)
+	#apt update			apt-get update	(Update index Repository)
+	#apt upgrade		apt-get upgrade	(Upgrade all of repository)
+	#apt autoremove		apt-get autoremove	(Remve Unusable Package)
+	#apt full-upgrade	apt-get dist-upgrade	(Upgrade Repository, Dependency and Package)
+	#apt search			apt-cache search	(search a Application)
+	#apt show			apt-cache show	(Show package details)
+	
+	New on apt:
+	#apt list	(Show list of packages)
+	#apt edit-resource (Edit repository list).
+
+
+	############## Software Mgmt ##############
+
+
+	-Install From Source Code
+	
+	-Install From Package(rpm)
+
+	-Automatic Install Using Yum
+
+
+
+		Application+Utiliteis + ....
+
+
+			Library
+			Drivers
+
+
+		Example: APPLICATION_X---->  Run ---> Library_x : every Application Run same library.
+
+
+    ############## Linux Library mgmt ##############
+
+					
+					
+				/lib
+				/lib64
+				/usr/lib
+					
+					
+	###################################################
+	#                   LPIC 101-102                  #
+	#                     Session 9                   #
+	###################################################
+	
+	
+	############## Linux Library Mgmt ##############
+
+		
+	Linux Standard Library Location:
+
+		/lib/*.so
+		/lib64/
+		/usr/lib
+		/usr/lib64
+
+
+
+			Note: Linux Library Config File:  "/etc/ld.so.conf"
+
+											include ld.so.conf.d/*.conf
+
+
+	############## Linux Mgmt Comands ##############
+
+			-ldd <Application_Binary_Path>   : show shared Library and it's dependencies
+
+					Example: #ldd /sbin/fdisk
+
+
+			ld.so.cache: is binary file that locate binary files and dependencies on it, it's path of all of libraries that are in: /lib , /lib64 , /usr/lib, /usr/lib64 .
+			
+			
+					-ldconfig ====> Re-Build ld.so.cache
+ 
+					#ldconfig---> rebuild Cache
+
+					#ldconfig -p ---> print cache
+
+
+
+
+
+			Example: 
+
+
+					Application -----> Error: libc.so.6.1
+
+
+					Linux :  /lib64/libc.so.6.2 ----> /lib64/libc.so.6.1
+
+					Download Library/Compile Library ----> *.so.? -----Copy ---> 
+					
+					
+					
+		==============================================================================
+	############## Linux Kernel Module/Object Mgmt ##############
+
+
+		/lib/modules//5.4.0-100-generic/kernel/*.ko
+
+
+		- lsmod ---> show currentlu loaded Modules
+
+		Notice: lsmod show just loaded module, if you want know details about all of your kernel module you should go to /lib/modules
+
+		cdrom <------ sr_mod : Means cdrom use srmod module 
+
+					B <------ A
+
+
+		- modinfo <Module_Name> : shows information, detailes, Dependancy, Addresse, etc about modules.
+
+				Example: #modinfo sr_mod
+
+
+		- rmmod <Module_Name> ----> Unload Module
+
+		Example: #rmmod sr_mod
+
+
+			- insmod <Module_Path> ----> Load Module
+
+				Example: #insmod /lib/modules/3.2.1/kernel/drivers/cdrom/cdrom.ko
+
+
+
+
+	####################### After Kernel 2.6 #######################
+
+
+			- modprobe <Module_Name>
+
+   
+				Example: #modprobe sr_mod
+
+
+	####################### Linux Network Manamgment ##################### 
+
+
+		#ifconfig ---->  show Active Interface/Connection
+		#ifconfig -a ---> show all interface/connection
+
+
+				eth0
+
+				eth1
+
+				eth2
+		old command:
+		
+			#ifconfig eth0 down
+			#ifconfig eth0 up
+		
+		new command:
+		
+			#ip address 
+						add
+						change
+						delete
+						flush
+						replace
+						show
+						help
+
+
+
+		ip [ OPTIONS ] address  { COMMAND | help }
+
+		ip address { add | change | replace } IFADDR dev IFNAME [ LIFETIME ] [ CONFFLAG-LIST ]
+
+		ip address del IFADDR dev IFNAME [ mngtmpaddr ]
+
+		ip address { save | flush } [ dev IFNAME ] [ scope SCOPE-ID ] [ metric METRIC ] [ to PREFIX ] [ FLAG-LIST ]
+               [ label PATTERN ] [ up ]
+
+		ip address [ show [ dev IFNAME ] [ scope SCOPE-ID ] [ to PREFIX ] [ FLAG-LIST ] [ label PATTERN ] [ master
+               DEVICE ] [ type TYPE ] [ vrf NAME ] [ up ] ]
+
+		ip address { showdump | restore }
+
+
+
+		ip [options]:
+		
+				ip  global - the address is globally valid.
+
+                    site - (IPv6 only, deprecated) the address is site local, i.e. it is valid inside this site.
+
+                    link - the address is link local, i.e. it is valid only on this device.
+
+                    host - the address is valid only inside this host.
+
+				
+			Best refrence for use command is : man ip addr	
+				
+				Example:  ip link set ens33 up/down
+				
+
+	#######################Set IP Address #######################
+
+		#ip addr add x.x.x.x/x dev ens33
+
+    #Manaully change:
+
+		vi /etc/netplan/00-installer-config.yaml
+
+		#for Dhcp:
+					
+					root@ubuntucore:/# vi /etc/netplan/00-installer-config.yaml
+					# This is the network config written by 'subiquity'
+					network:
+						ethernets:
+							ens33:
+								dhcp4: true
+						version: 2
+
+			
+
+		#For STATIC:
+
+			network:
+				renderer: networkd
+				ethernets:
+					ens33:
+							dhcp4: no
+							addresses: [10.244.22.58/24]
+							gateway4: 10.244.22.3
+							nameservers:
+									addresses: [10.244.0.1,10.244.0.136]
+					version: 2
+
+		# after change the setting of networks you should set this command: netplan apply
+		
+		
+	###################################################
+	#                   LPIC 101-102                  #
+	#                     Session 10                  #
+	###################################################
+
+
+	#Permanent DNS:
+		vi /etc/resolve.conf
+		
+				nameserver 8.8.8.8
+				nameserver 1.1.1.1
+				
+				
+
+	###################################################
+	#                   LPIC 101-102                  #
+	#                     Session 11                  #
+	###################################################
+	
+	
+	# for use dhcp : #dhclient
+
+		
+	Usage: dhclient [-4|-6] [-SNTPRI1dvrxi] [-nw] [-p <port>] [-D LL|LLT]
+					[--dad-wait-time <seconds>] [--prefix-len-hint <length>]
+					[--decline-wait-time <seconds>]
+					[--address-prefix-len <length>]
+					[-s server-addr] [-cf config-file]
+					[-df duid-file] [-lf lease-file]
+					[-pf pid-file] [--no-pid] [-e VAR=val]
+					[-sf script-file] [interface]*
+		dhclient {--version|--help|-h}
+
+
+	 # for use telnete in linux first setup telnet: apt-get install telnet
+	 
+	# fir use root access in telnet:
+									1) edit /etc/pam.d/remote
+														#auth	required	pam_securetty.so
+														
+									2) service telnet restart
+									
+	# for show ports and network traffic:
+											netstat -ntlp
+											## before you should: apt install net-tools ##
+											
+											netstat -nao ( for known what's PID open connection) and then with PID we can find process and program that open connection.
+								
+										
+
+	###################################################
+	#                   LPIC 101-102                  #
+	#                     Session 12                  #
+	###################################################
+	
+	
+	#ps  :for show current terminal Proccess
+		
+		#for more details: man ps
+
+	ps -aux : This command show all linux Process
+	#ps -elf :  BSD Unix
+
+	example: ps -elf | grep -i sshd ( switch "i" use for filter for name )
+		
+		NOte: for find just PID you can use pgrep command for example:
+				#pgrep sshd
+			
+	
+	EXAMPLES
+       To see every process on the system using standard syntax:
+          ps -e
+          ps -ef
+          ps -eF
+          ps -ely
+
+       To see every process on the system using BSD syntax:
+          ps ax
+          ps axu
+
+       To print a process tree:
+          ps -ejH
+          ps axjf
+
+       To get info about threads:
+          ps -eLf
+          ps axms
+
+       To get security info:
+          ps -eo euser,ruser,suser,fuser,f,comm,label
+          ps axZ
+          ps -eM
+
+       To see every process running as root (real & effective ID) in user
+       format:
+          ps -U root -u root u
+
+       To see every process with a user-defined format:
+          ps -eo pid,tid,class,rtprio,ni,pri,psr,pcpu,stat,wchan:14,comm
+          ps axo stat,euid,ruid,tty,tpgid,sess,pgrp,ppid,pid,pcpu,comm
+          ps -Ao pid,tt,user,fname,tmout,f,wchan
+
+       Print only the process IDs of syslogd:
+          ps -C syslogd -o pid=
+
+       Print only the name of PID 42:
+          ps -q 42 -o comm=
+
+
+		#PID: Process Identifier
+		#PPID: Prent Process Identifier
+
+
+
+	########## Sending Signal To Process ##########
+
+	#linux has many signal that to many work you should send signal to specific process, list of this signal is :
+		
+		#kill -l : show all linux Signal
+
+
+	########## Signal 15 (SIGTERM) ##########
+
+		pgrep sshd : when you close program in linux signa 15 send to that program that named signal terminate: sigterm
+
+			Example: #kill -15 6766
+
+
+	########## Signal 9 (SIGKILL) ##########
+		
+		this signal forced close program, or kill program
+		
+
+			Example: #kill -9 6766
+
+
+	##########Signal 20 (SIGTSTP) ##########
+	
+		this signal suspend the program, and that program not use cpu clock.
+			Example: #kill -20 6766
+
+
+	########## Signal 18 (SIGCONT) ##########
+		
+		for continue last suspend process use signal 18
+			Example: #kill -18 6766
+
+	########## Signal 1 (SIGHUP) ##########
+	
+		this signal says to process that review it's configurations.
+	
+			Example: #kill -1 6766
+
+	########## Linux Jobs Mgmt ##########
+
+		-FG Jobs : foregroung jobs. (when the terminal run jobs in foreground we can't do any thing with terminal)
+		
+		-BG Jobs : Background jobs. (when the terminal run jobs in foreground we can do any thing with terminal)
+
+		you can use " & " symbol after command to send program in backgrand. for example: 
+		
+		
+			#jobs : this command show which tasks are in background with state.
+
+			#fg %<JOB_NUMBER> : send program to background.
+
+			#bg %<JOB_NUMBER> : send program to foreground.
+
+
+	########## Linux Process Priority ##########
+
+
+	NI : is nice value, it's seprate in range -19, +20
+
+
+	-20 <------------------------------------0---------------------------------------------> +19
+
+
+ 	 HIGH										       							  			 LOW
+
+		Default NI Value of Root User : 0
+
+		Default NI Value of Regular Users : 10
+        
+			regular user cannot change own priority to - , just root value can use all of rang of pririty.
+
+		Run Application/Command Using Nice Value:
+
+			#nice -n -15 firefox& 
+
+			Change Nice Value on the fly:
+
+			#renice -n 12 <PID>
+		
+
+		########### Task: CPU-Intensive Process ###########
+
+
+		x="$1"
+		echo "$2" $(date)
+		while [ $x -gt 0 ]; do x=$(( x-1 ));done
+		echo "$2" $(date)
+
+		########### Dynamic Process Mgmt ###########
+
+
+
+			#top -d 1 : lives show process
+
+		#Show as a Tree:
+
+			#pstree: shows all of process as tree and mother of all precess is init.
+
+
+			http://www.ibm.com/developerworks/library/l-lpic1-103-6/index.html
+
+	###################################################
+	#                   LPIC 101-102                  #
+	#                     Session 13                  #
+	###################################################
+	
+	
+		Apache:
+======================================================================================================================
+
+		1.www web Server
+
+
+		2.Modular  Structure
+			Task:
+				1. Install Apche 2.2x
+					a. 'htttp*rpm'  on Redhat and Apache2 on Other Distribution
+
+  
+
+					/etc/apach2/  : top-level Configuration 
+					/etc/apache2/apache2.conf  : Primary Configuration Directory 
+					/etc/apache2/sites-available/000-default.conf : Virtual Host Configuration File
+					/etc/apache2/conf-available/security.conf : Virtual Host Configuration Options
+					/etc/apache2/sites-available/your_domain.conf : site configuration
+
+
+
+					3.Explore Apache "/etc/apache2/apache2.conf" Main Configurtion file:
+
+
+	########## Section 1: Global Environment ##########
+
+		serverRoot "/etc/apach2"   ----> Server Lock into this directory
+
+
+		PidFile run/apach2.pid ----> pid file of Apache process
+
+
+		Timeout 120 ----> http time-out is set to 120 second
+
+
+		KeepAlive Off -----> if one client can end multiple request per connectsion
+
+
+		MaxKeepAliveRequests 100 ----> maximum request per connection
+
+
+		KeepAliveTimeout 15 ----> request timeout
+
+
+				Apache Process Mode:
+
+					A)
+
+						prefork Mode -----> Classic Mode
+						StartServers       8 ----> Start 8 Instance
+						MinSpareServers    5 ----> minimum 5 spare process
+						MaxSpareServers   20 ----> maximum 20 spare process
+						ServerLimit      256---> For non-threaded servers (i.e., prefork), MaxClients translates into the maximum number of child processes that will be launched to serve requests
+						MaxClients       256 ---> he MaxClients directive sets the limit on the number of simultaneous requests that will be served. Any connection attempts over the MaxClients limit will normally                                                be queued
+						MaxRequestsPerChild  4000--->The MaxRequestsPerChild directive sets the limit on the number of requests that an individual child server process will handle. 
+
+
+
+		How it Works:				
+
+						A single control process is responsible for launching child processes which listen for connections and serve them when they arrive. Apache always tries to maintain several spare or idle server processes, which stand ready to serve incoming requests. In this way, clients do not need to wait for a new child processes to be forked before their requests can be served.
+
+
+					B)
+
+						# worker MPM
+						# StartServers: initial number of server processes to start
+						# MaxClients: maximum number of simultaneous client connections
+						# MinSpareThreads: minimum number of worker threads which are kept spare
+						# MaxSpareThreads: maximum number of worker threads which are kept spare
+						# ThreadsPerChild: constant number of worker threads in each server process
+						# MaxRequestsPerChild: maximum number of requests a server process serves
+							<IfModule worker.c>
+								StartServers         2
+								MaxClients         150
+								MinSpareThreads     25
+								MaxSpareThreads     75 
+								ThreadsPerChild     25
+								MaxRequestsPerChild  0
+								</IfModule>
+
+
+
+
+				#Listen 12.34.56.78:80 ----> listen on ip and port setting
+
+
+
+					Include conf.d/*.conf ----> also include config file in this directory
+
+
+					apach2 runs as apache:apache   on RHL5
+
+
+	########## Section 2: 'Main' server configuration ##########
+
+	Apache maintains, always, a 'main' server, which is independedt of Virtual Hosts.This server is a catch-all fot traffic doesn't match any of the defined virtual host
+
+
+
+		ServerAdmin root@localhost
+
+
+		DocumentRoot "/var/www/html"
+
+    # DocumentRoot: The directory out of which you will serve your
+    # documents. By default, all requests are taken from this directory, but
+    # symbolic links and aliases may be used to point to other locations.
+
+
+
+
+		<Directory> directive govenrs file system access.
+
+		Note: The primary Apache process runs as 'root' and has access to the full file system.However, <Directory> directive restricts web-user's view if the filesystem.
+
+
+
+
+		order allow and deny on Directive:
+
+		The Order-Deny-Allow-mode, or Allow-anyone-except-this-list-or-maybe-not
+
+	Order Deny,Allow
+
+		This is an allow by default mode. Where you will give optionnaly a list of Deny rules.
+		Then the Deny rules are checked, to reject requests based on theses rules.
+		If someone gets rejected by one of the Deny rules you can maybe get him back with an Allow rule.
+
+	I would call it
+
+		Policy Allow
+
+			Rule Deny
+			list of Deny rules
+				Exception
+					list of Allow rules
+
+
+
+	The Order-Allow-Deny-mode, or Reject-everyone-except-this-list-or-maybe-not:
+
+	Order Allow,Deny
+
+    This is a Deny by default mode. Where you will give optionnaly a list of Allow rules.
+    Then the Allow rules are checked, And someone willing access must match at least one rule.
+    If someone gets allowed by one of the Allow rules you can still reject him with a Deny rule.
+
+	In the simplified form:
+
+	Policy Deny
+	Rule Allow
+     list of Allow rules
+	Exception
+     list of Deny rules
+	------------------------------------
+
+		Example : 
+
+			Order Deny,Allow
+			Deny from 127.0.0.1
+			Deny from 127.0.0.2
+			...
+
+		This'll deny the specific things you want to kill, and then allow everything else by default.
+
+	----------------------------------------
+
+
+
+	=========================================================================================================================
+	Start Apache
+
+		a)
+			#service apach2 status
+			#service apach2 start
+		b)/etc/init.d/apach2 start 
+
+
+		After Start Apache check Sockets :
+
+		#netstat -ntlp | grep -i 80
+
+			#ps -aux | grep -i https ===> Primary Apache Process run as a 'root' and Subsequets Porcess run as "apache" by default on CentOS | Redhat
+
+ 
+		Note:Ensure that your content is ALWAYS readable by" "Apache" User or group
+ 
+		"DocumentRoot "/var/www/html" ===> Default content home for Default Host
+
+		Note:By Default Apache Mintain 2 Virutal Host: TCP:80 and TCP:443
+
+
+		Note:Ensure Serivce Persistence:
+			#chkconfig apach2 on 
+
+
+	*****Apache Logs*****
+		Access Log
+     
+		Error Log
+
+
+	#cd /etc/apach2
+		#ls -l
+		#cd /var/log/apach2/ <===apach2 Default Log Location
+		#ls 
+
+			access_log
+			error_log
+ 
+		Note:Good Request ===> access_log
+		bad Request  ===>error_log
+
+		access_log ==> traps messages to default host and trap messages from virtual hosts without log configuration
+
+		error_log  ==> traps error messages from default host and virtual hosts without log configuration
+
+		Note: Apache Logs Immediately after access
+		#watch tail /var/log/apach2/access_log  and access apache then view log
+
+		log Entry Variables:
+		%h - Connecting Host (ipv4|ipv4)
+		%l - IDENT check - usualy returns '-' or nothing 
+		%u - Connecting $USER - usually blank unless AUTH via HTTP was used
+		%t - timestamp
+		%r - request method (GET|POST)
+		%s - status code returend to client - 2xx-5xx (2xx and 3xx ok / 4xx problem on Client/ 5xx problem on Server)
+		%b - size of content returned to client
+		%{refer} ===> '-' means a direct request was made
+		%{User-Agent}
+
+
+		goto apach2.conf
+		LogFormat Directive  ?????????
+ 
+
+      CustomLog logs/access_log common ====> do common LogFormat
+
+			Task: Create simultaneous access_log of desired format:
+			vi /etc/http/conf/apach2.conf and add the following Line
+
+			LogFormat "%h %t" combinded_mylog
+  
+			CustomLog logs/access_log_mylog  combinded_mylog
+
+	#service apach2 restart and then check #ls -ltrh /var/log/apach2/
+
+
+			Note:Types defined in primary config file (apach2.conf) can easily be referenced from Any Virtual host
+			Note:Log format can be defined on a per-virtual host baisis if neccesery
+
+	*****Apache Virtual Hosts*****
+		Two Implementation :
+
+		1. IP-Based - one site per IP Address- contrained by publicaly-accessible IPV4 address
+
+		2. Name-Based- Multiple Site per IP|Port Address Combination
+			2.1 HTTP 1.1 Spec - Client include host header name in request to server: "http://www.google.com"
+======================================================================================================================
+
+	****IP-Based Virtual-Host Configuration****
+
+	Task:
+		1. IP-Based Configuration
+			a. #ifconfig eth0 192.168.75.104   ----> ipv4 on eth0 interface 
+			b. #ifconfig eth0:1 192.168.75.105 ----> ipv4 alias on eth0 interface
+		#ifconfig eth0:1 192.168.75.106 ----> ipv4 alias on eth0 interface
+
+			c.define a virtual host site.test.local:
+
+		#cd /etc/apach2/conf.d
+		#vi site1.conf
+            <VirtualHost 192.168.75.105:80>
+                ServerAdmin webmaster@site1.test.local
+                ServerName  site1.test.local
+                DocumentRoot /home/site1/www
+                <Directory /hoem/site1/www >
+                    order allow,deny
+                    allow from all
+                </Directory>
+
+
+		#mkdir /home/site1/www/
+		#vi /home/site1/www/index.html
+			site1.test.local
+
+			d.Ensure that Apache listens to "192.168.75.105' - '/etc/apach2/conf/apach2.conf'
+              #vi   /etc/apach2/conf/apach2.conf
+                        Listen 192.168.75.104:80
+                        Listen 192.168.75.105:80
+				Listen 192.168.75.106:80
+
+
+
+			e.#service apach2 restart ===> then run 'netstat -ntlp | grep -i apach2'
+
+			Note:if '.conf' files for virtual hosts are placed in ' /etc/apach2/conf', then update 'apach2.conf' to include 'conf/*.conf'
+				OR placed '.conf' file in '/etc/apach2/conf.d/'
+				OR create symbolic link of '.conf' on '/etc/apach2/conf.d/' directory
+
+			f.#service apach2 reload 
+
+ 
+			g.#apach2 -S
+
+				Note : SELinux, by default, will pose problems when service web content from: $HOME
+				Note: Temporarily, disable SELinux with: 'setenforce permissive'
+
+
+.
+			h. Create another viertual host site2.test.local
+				#cp /etc/apach2/conf.d/site1.test.local /etc/apach2/conf.d/site2.test.local
+
+				#vi site2.test.local and change config for new site2.test.local
+
+
+             <VirtualHost 192.168.75.104:80>
+                ServerAdmin webmaster@site1.test.local
+                ServerName  site2.test.local
+                DocumentRoot /home/site2/www
+                <Directory /hoem/site1/www >
+                    order allow,deny
+                    allow from all
+                </Directory>
+
+
+			i. serivce apach2 restart
+			j. apach2 -S
+
+			k. Do http://192.168.75.105  and http://192.68.75.106
+
+
+
+	======================================================================================================================
+
+	****Name-Based Virtual-Host Configuration****
+
+		Task : Create Name-Based Virutal Host :
+
+		vi /etc/apach2/conf.d/site1.test.local.conf"
+
+
+		NameVirtualHost *:80
+
+			<VirtualHost *:80>
+			DocumentRoot /home/site1/www
+			ServerName site1.test.local       
+
+			<Directory /home/site1/www>
+			order allow,deny
+		allow from all
+			</Directory>
+    
+			</VirtualHost>
+
+	======================================================================================================================
+		*****Apache Self-Signed Certificate *****
+
+		1)Install Apache ssl_Module id not installed
+
+			#yum install mod_ssl
+			#less /etc/apach2/conf.d/ssl.conf
+			#service apach2 restart
+			#netstat -ntlp | grep -i 443
+
+		2)Create Certificate Request and Key Pair
+
+			#genkey site1.test.local
+
+
+
+
+		3)Edit Name-Based VritualHost to reflect new Cert
+
+			NameVirtualHost *:80
+
+				<VirtualHost *:80>
+				DocumentRoot /home/site1/www
+				ServerName site1.test.local       
+
+				<Directory /home/site1/www>
+					order allow,deny
+					allow from all
+				</Directory>
+    
+				</VirtualHost>
+
+
+			NameVirtualHost *:443
+			<VirtualHost *:443>
+				SSLEngine on
+					SSLCertificateFile /etc/pki/tls/certs/site1.test.local.crt
+					SSLCertificateKeyFile /etc/pki/tls/private/site1.test.local.key
+ 
+			DocumentRoot /home/site1/www
+			ServerName site1.test.local
+			<Directory /home/site1/www>
+			order allow,deny
+			allow from all
+			</Directory>
+
+		</VirtualHost>
+
+
+			#service apach2 restart
+
+
+	======================================================================================================================
+
+		*****Apache Authnetication******
+
+			A-Basic Authentication 
+
+				A-1 ) Create password file and add user1 using #htpasswd -c /etc/apach2/conf.d/auth_user_file user1
+ 
+				A-2 )Edit Virutal Host and add Authentication 
+
+		NameVirtualHost *:80
+		<VirtualHost *:80>
+		ServerName example1.com
+		DocumentRoot /home/example1
+		<Directory /home/example1/>
+			AuthType Basic        <-------------Auth Mode
+		AuthName "Authentication Required"  <----------Auth Prompt
+		AuthUserFile /etc/apach2/conf.d/auth_user_file <-------Auth User DB (Created By htpasswd)
+		Require valid-user <-----Enable Authentication
+		order allow,deny
+			allow from all
+			</Directory>
+			</VirtualHost>
+
+
+
+		B-Digest Authentication 
+
+			B-1 ) Create Digest password file and add user1 using #htdigest -c /etc/apach2/conf.d/auth_digest_file "member only" user1
+				Note:"member only" is realm and is required 
+
+		B-2 ) Edit Virutal Host and add Authentication 
+				NameVirtualHost *:80
+				<VirtualHost *:80>
+				ServerName example1.com
+				DocumentRoot /home/example1
+				<Directory /home/example1/>
+				AuthType Digest  <-------------Auth Mode
+				AuthName "member only"  <----------Auth realm
+			AuthUserFile /etc/apach2/conf.d/auth_user_file <-------Auth Digest File (Created By htdigest
+			Require valid-user <-----Enable Authentication
+			order allow,deny
+		allow from all
+			</Directory>
+			</VirtualHost>
+
+
+
+	****Note: Group Authentication also Possible 
+      1)create group file :
+            vi /etc/apach2/conf.d/group_files
+                 MYGROUP: user1 user2
+
+     2)Add AuthGroupFile Directive in virutal Host like bellow:
+
+         AuthGroupFile /etc/apach2/conf.d/group_file
+         require group MYGROUP 
+
+     3)#service apach2 restart
+
+
+     Note: if user is a member on MYGROUP and also is in UserFile with correct password permit to Login
+
+
+	======================================================================================================================
+
+
+	###################################################
+	#                   LPIC 101-102                  #
+	#                     Session 14                  #
+	###################################################
+
+	Tables:
+
+	mangle: alter packet (TOS/TTL)
+	nat: Change ip address and ports
+	filter(Default): IP Packet filtering 
+
+
+	show rules:
+
+		#iptables -L -v --line-numbers
+
+		#iptables -L -t filter|nat|mangle -v --line-numbers  
+
+
+	iptable command syntax:
+
+		#iptables <Name_of_the_chain> <Name_of_the_table> <Layer3_Src_Dst_Address> <Layer4_Src_Dst_port_protocol> -j TARGET
+
+		e.g: #iptables -A INPUT -t filter -s 192.168.1.0/24 -j DROP
+
+
+
+		Save/Restore Rules:
+
+		#iptables-save > fw
+
+		#iptables-restore < fw
+
+
+		Chain Mgmt:
+
+		-A Append ----> Append Rule into end of Rules in Chain
+		-I Insert ----> Insert Rule into Line Number x
+		-D Delete ----> Delete Rule in Line Number x
+		-R Replace----> Replace Rule in Line Number x
+		-F Flush  ----> Flush Rules 
+		-Z Zeroized ---> Zeroized COUnters
+
+
+
+	Append Example:
+
+		e.g: Pemrit SSH : #iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+		Deny Telnet: #iptables -A INPUT -p tcp --dport 23 -j DROP
+                   
+                  #iptables -L -v --line-numbers
+
+		Insert Example:
+
+                   #iptables -I INPUT 1 -p tcp --dport 80 -j ACCEPT
+
+		Delete Example:
+
+                   #iptables -D INPUT 2
+                   #iptables -L -v --line-numbers
+
+
+		Replace Example:
+
+                   #iptables -R INPUT 2 -p tcp --dport 8080 -j ACCEPT
+
+
+	Flush Rule Example:
+
+                   #iptables -F
+                   #iptables -L -v --line-numbers
+
+	Zeroize Counters Example:
+
+                   #iptables -Z INPUT
+                
+
+
+
+	User-Defined CHAIN:
+
+	#iptables -N INTERANET
+	#iptables -R INPUT 1 -S 192.168.1.1 -j INTERANET
+	#iptables -A INTERNAET -p tcp --dport 22 -j DROP
+
+
+
+	Change Default Policy From ACCEPT to DROP
+
+	#iptables -P INPUT DROP
+	#iptables -L -v --line-numbers
+
+
+	MATCHES in iptables:
+
+	--src,-s,--source
+
+	-d,dst,--destination
+
+	1.block all traffic from source ip 192.168.1.72
+  
+        #iptables -A INPUT -s|-src|--source 192.168.1.72 -j DROP
+
+	2.block all traffic based on interface. i.e . eth0/eth1
+    
+       #iptables -A INPUT -i eth1 -s 10.0.0.0/24 -j DROP
+
+	3.negation- block all traffic not sourced/from 192.168.1.100
+
+       #iptables -A INPUT -s ! 192.168.1.100 -j DROP
+
+	4.Wild-card  an interface by adding '+' to the end of the common character
+    a.eth0 eth1 eth+ 
+              #iptables -A INPUT -i eth+ -p tcp --dport ssh -j DROP
+
+
+	TCP(Layer 4) MATCHES:
+
+	-p tcp, --protocol tcp
+	--sport,--source-port
+	--sport,--destination-port
+	--tcp-flags SYN,FIN,ACK
+
+		1. iptables -A INPUT --protocol tcp --dport telnet -j DROP
+
+		2. iptables -A OUTPUT -p tcp --destination-port 3389 -j DROP
+
+
+	UDP(Layer 4)MATCHES:
+		-p udp
+
+
+
+
+	Mathces multiport with fewer rules:
+
+	Example: Filter traffic to ports 8080 and 23
+
+                 #iptables -A INPUT -p tcp -m multiport --destination-port 8080,23 -j DROP
+
+
+
+	MAC Address Filtering:
+
+	Example: #iptables -A INPUT -p tcp -m mac --mac-source 00:00:00:00:00:00 -j DROP
+
+
+
+		Connection State Tracking:
+
+			#iptables -A INPUT -m stat
+				e --state ESTABLISHED -j ACCEPT
+			#iptabls -A OUTPUT -m state --state NEW,ESTABLISHED -j ACCEPT
+	Note: cat /proc/net/ip_contrack
+
+
+
+
+    NEW -- meaning that the packet has started a new connection, or otherwise associated with a connection which has not seen packets in both directions, and
+
+    ESTABLISHED -- meaning that the packet is associated with a connection which has seen packets in both directions,
+
+    RELATED -- meaning that the packet is starting a new connection, but is associated with an existing connection, such as an FTP data transfer, or an ICMP error.
+
+
+	###################################################
+	#                   LPIC 101-102                  #
+	#                     Session 15                  #
+	###################################################
+	
+	
+	Step 0) Update Distribution/Package---> #yum update
+
+	Step 1) Install Dependency and Utilites 
+ 
+		1-1 Add epel Repo
+
+		1-2 yum -y groupinstall "Development Tools"
+
+		1-3 yum -y install ncurses-devel qt-devel
+
+ 
+		Step 2) Downlod Source_Code Kernel  from kernel.org
+
+
+	Step 3)Extract Source in  /usr/src/
+
+		3-1 cd /usr/src/
+		3-2 tar xJvf /root/Desktop/Linux-4.5.6.tar.xz
+		3-3 ln -s Linux-4.5.6 linux
+		3-4 cd linux
+		3-5 make menuconfig|xconfig ----> Configure Kernel
+		3-6 make bzImag ---> Compile Kernel
+		3-7 make modules ----> Compile Modules
+		3-8 make modules_install
+		3-9 make install
+   
+	Step 4) Check boot Folder
+
+	Step 5) Reboot
+	====================================================================
+
+		default=1
+
+		timeout=5
+
+	splashimage=(hd0,0)/grub/splash.xpm.gz
+
+
+		title CentOS (3.2.1)
+			root (hd0,0)
+			kernel /vmlinuz-3.2.1 ro root=/dev/mapper/VolGroup-lv_root rd_NO_LUKS LANG=en_US.UTF-8 rd_NO_MD rd_LVM_LV=VolGroup/lv_swap SYSFONT=latarcyrheb-sun16 crashkernel=auto rd_LVM_LV=VolGroup/lv_root  KEYBOARDTYPE=pc KEYTABLE=us rd_NO_DM rhgb quiet 
+			initrd /initramfs-3.2.1.img
+
+		title CentOS (2.6.32-431.20.3.el6.x86_64)
+			root (hd0,0)
+			kernel /vmlinuz-2.6.32-431.20.3.el6.x86_64 ro root=/dev/mapper/VolGroup-lv_root rd_NO_LUKS LANG=en_US.UTF-8 rd_NO_MD rd_LVM_LV=VolGroup/lv_swap SYSFONT=latarcyrheb-sun16 crashkernel=auto rd_LVM_LV=VolGroup/lv_root  KEYBOARDTYPE=pc KEYTABLE=us rd_NO_DM rhgb quiet
+		initrd /initramfs-2.6.32-431.20.3.el6.x86_64.img
+
+	title CentOS (2.6.32-431.el6.x86_64)
+			root (hd0,0)
+			kernel /vmlinuz-2.6.32-431.el6.x86_64 ro root=/dev/mapper/VolGroup-lv_root rd_NO_LUKS LANG=en_US.UTF-8 rd_NO_MD rd_LVM_LV=VolGroup/lv_swap SYSFONT=latarcyrheb-sun16 crashkernel=auto rd_LVM_LV=VolGroup/lv_root  KEYBOARDTYPE=pc KEYTABLE=us rd_NO_DM rhgb quiet 
+			initrd /initramfs-2.6.32-431.el6.x86_64.img
+
+
+		title CentOS (4.6.5)
+			root (hd0,0)
+			kernel /vmlinuz-4.6.5 ro root=/dev/mapper/VolGroup-lv_root rd_NO_LUKS LANG=en_US.UTF-8 rd_NO_MD rd_LVM_LV=VolGroup/lv_swap SYSFONT=latarcyrheb-sun16 crashkernel=auto rd_LVM_LV=VolGroup/lv_root  KEYBOARDTYPE=pc KEYTABLE=us rd_NO_DM rhgb quiet
+			initrd /initramfs-4.6.5.img
+
+
+		titile Windows 7
+			chainloader+1
+
+
+
+
+
+
+													<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<The END>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
